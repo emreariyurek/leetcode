@@ -12,22 +12,19 @@
 class Solution {
 public:
     int minDiffInBST(TreeNode* root) {
-        vector<int> vec;
-        inorder(root, vec);
-        int result = abs(vec[0] - vec[1]);
-        for (int i = 2; i < vec.size(); i++) {
-            result = min(result, abs(vec[i] - vec[i - 1]));
-        }
-        
+        int value = -1, result = INT_MAX;
+        dfs(root, value, result);
         return result;
     }
     
-    void inorder(TreeNode *node, vector<int> &vec) {
+    void dfs(TreeNode *node, int &value, int &result) {
         if (!node)
             return;
         
-        inorder(node->left, vec);
-        vec.push_back(node->val);
-        inorder(node->right, vec);
+        dfs(node->left, value, result);
+        if (value != -1)
+            result = min(result, abs(node->val - value));
+        value = node->val;
+        dfs(node->right, value, result);
     }
 };
